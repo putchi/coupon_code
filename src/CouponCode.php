@@ -3,7 +3,7 @@
  * CouponCode
  * Copyright (c) 2014 Atelier Disko. All rights reserved.
  *
- * Modified by Alex Rabinovich
+ * Modified by Alex (Putchi) Rabinovich
  * 
  * Use of this source code is governed by a BSD-style
  * license that can be found in the LICENSE file.
@@ -12,7 +12,6 @@
 namespace CouponCode;
 
 use Exception;
-use App\CouponOption;
 
 class CouponCode
 {
@@ -65,11 +64,11 @@ class CouponCode
     protected $_badWords = [
         '0TER', 'AHEQ', 'BTER', 'C00C', 'C0EA', 'CBBC', 'CBEA', 'CEVPX', 'CRAVF', 'CUNG', 'CVFF', 'CVT', 'DHRRE',
         'ENG', 'FA0O', 'FABO', 'FCREZ', 'FUNT', 'FUVG', 'FYHG', 'FYNT', 'G0FF', 'GBFF', 'GHEQ', 'GJNG', 'GVGF',
-        'J0EZ', 'JBEZ', 'JNAT', 'JNAX', 'LNX', 'NCR', 'NEFR', 'NFF', 'NVQF', 'O00MR', 'O00O', 'O00OL', 'O0M0',
-        'OBBMR', 'OBBO', 'OBBOL', 'OBMB', 'OHGG', 'OHZ', 'ONYYF', 'ORNFG', 'OVGPU', 'P0J', 'P0PX', 'PBJ', 'PBPX',
-        'PENC', 'PERRC', 'PHAG', 'PY0JA', 'PYBJA', 'PYVG', 'QRIVY', 'QVPX', 'SERNX', 'SHPX', 'SNEG', 'SNPX', 'SNG',
-        'SNGF0', 'SNGFB', 'SRPX', 'TU0FG', 'TUBFG', 'U0Z0', 'UBZB', 'URYY', 'VQV0G', 'VQVBG', 'W0XR', 'W0XRE', 'W1MM',
-        'WBXR', 'WBXRE', 'WREX', 'WVFZ', 'WVMM', 'XA0O', 'XABO', 'YVNE', 'ZHSS'
+        'J0EZ', 'JBEZ', 'JNAT', 'JNAX', 'JGS', 'LNX', 'NCR', 'NEFR', 'NFF', 'NVQF', 'O00MR', 'O00O', 'O00OL',
+        'O0M0', 'OBBMR', 'OBBO', 'OBBOL', 'OBMB', 'OHGG', 'OHZ', 'ONYYF', 'ORNFG', 'OVGPU', 'P0J', 'P0PX', 'PBJ',
+        'PBPX', 'PENC', 'PERRC', 'PHAG', 'PY0JA', 'PYBJA', 'PYVG', 'QRIVY', 'QVPX', 'SERNX', 'SHPX', 'SNEG', 'SNPX',
+        'SNG', 'SNGF0', 'SNGFB', 'SRPX', 'TU0FG', 'TUBFG', 'U0Z0', 'UBZB', 'URYY', 'VQV0G', 'VQVBG', 'W0XR', 'W0XRE',
+        'W1MM', 'WBXR', 'WBXRE', 'WREX', 'WVFZ', 'WVMM', 'XA0O', 'XABO', 'YVNE', 'ZHSS'
     ];
 
     /**
@@ -331,18 +330,24 @@ class CouponCode
      */
     protected function _random($bytes)
     {
-        if (is_readable('/dev/urandom')) {
-            $stream = fopen('/dev/urandom', 'rb');
-            $result = fread($stream, $bytes);
-            fclose($stream);
-            return $result;
+        $salt = openssl_random_pseudo_bytes($bytes, $crypto_strong);
+
+        if (!$crypto_strong) {
+            if (@is_readable('/dev/urandom')) {
+                $stream = fopen('/dev/urandom', 'rb');
+                $result = fread($stream, $bytes);
+                fclose($stream);
+
+                return $result;
+            } else if (function_exists('mcrypt_create_iv')) {
+                return mcrypt_create_iv($bytes, MCRYPT_DEV_RANDOM);
+            } else {
+                // This should not happen
+                throw new Exception("No source for generating a cryptographically secure seed found.");
+            }
         }
 
-        if (function_exists('mcrypt_create_iv')) {
-            return mcrypt_create_iv($bytes, MCRYPT_DEV_RANDOM);
-        }
-
-        throw new Exception("No source for generating a cryptographically secure seed found.");
+        return $salt;
     }
 
     private function _codeWithPrefix($code)
