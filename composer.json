@@ -5,7 +5,7 @@
     "homepage": "https://github.com/putchi/coupon_code",
     "license": "BSD-3-clause",
     "type": "library",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "minimum-stability": "stable",
     "authors": [
         {
