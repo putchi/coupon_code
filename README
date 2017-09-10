@@ -19,7 +19,7 @@ Installation
 The preferred installation method is via composer. You can add
 the library as a dependency via:
 
-$ composer require atelierdisko/coupon_code
+$ composer require putchi/coupon_code
 
 Quickstart
 ----------
