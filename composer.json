@@ -4,6 +4,9 @@
     "keywords": ["coupon", "voucher", "code", "token", "key"],
     "homepage": "https://github.com/putchi/coupon_code",
     "license": "BSD-3-clause",
+    "type": "library",
+    "version": "1.1.0",
+    "minimum-stability": "stable",
     "authors": [
         {
             "name": "Atelier Disko",
@@ -14,8 +17,6 @@
             "homepage": "https://github.com/putchi"
         }
     ],
-    "version": "1.1.0",
-    "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0"
     },
