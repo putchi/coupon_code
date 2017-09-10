@@ -1,13 +1,17 @@
 {
-    "name": "atelierdisko/coupon_code",
+    "name": "putchi/coupon_code",
     "description": "PHP library to generate and validate coupon code strings.",
     "keywords": ["coupon", "voucher", "code", "token", "key"],
-    "homepage": "https://github.com/atelierdisko/coupon_code",
+    "homepage": "https://github.com/putchi/coupon_code",
     "license": "BSD-3-clause",
     "authors": [
         {
             "name": "Atelier Disko",
             "homepage": "http://atelierdisko.de"
+        },
+        {
+            "name": "Alex (putchi) Rabinovich",
+            "homepage": "https://github.com/putchi"
         }
     ],
     "require": {
